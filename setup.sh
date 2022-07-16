@@ -52,14 +52,33 @@ update_or_install_postgres() {
 	fi
 }
 
+update_or_install_node() {
+	println "checking node"
+	
+	if cask_is_installed node ;  then
+		if ! brew outdated --quiet node ; then
+			println "updating node"
+		else
+			println "node is up to date"
+		fi
+	else
+		println "installing node"
+	fi
+}
+
 update_or_install_all() {
+	println "running insert/update all script"
+
 	update_or_install_brew
 	update_or_install_golang
 	update_or_install_postgres
+	update_or_install_node
+
+	println "finished insert/update all script"
 }
 
 # rails?
-# node/npm?
+# npm?
 # react?
 # python3 -> append to file, then run brew command
 # run full suite of installs/updates
