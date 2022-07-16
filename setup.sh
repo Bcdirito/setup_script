@@ -6,6 +6,10 @@ println() {
 	printf "\n$text\n"
 }
 
+cask_is_installed(){
+	brew ls --formula -1 | grep -Fqx "$1"
+}
+
 update_or_install_brew() {
   	if ! command -v brew >/dev/null; then
 		println "installing homebrew"
@@ -17,13 +21,32 @@ update_or_install_brew() {
 	fi
 }
 
-update_or_install_brew
+update_or_install_golang() {
+	println "checking golang"
+
+	if cask_is_installed go ; then
+		if ! brew outdated --quiet go ; then
+			println "updating golang"
+			brew upgrade go
+		else
+			println "golang up to date"
+		fi
+	else
+		println  "installing golang"
+		brew install go
+	fi
+}
+
+update_or_install_all() {
+	update_or_install_brew()
+	update_or_install_golang()
+}
+
+update_or_install_golang
 
 # command left to get:
-# rails
-# golang
+# rails?
 # node/npm?
-# git
 # postgresql
 # react?
 # python3 -> append to file, then run brew command
