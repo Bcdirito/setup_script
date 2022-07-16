@@ -37,17 +37,29 @@ update_or_install_golang() {
 	fi
 }
 
-update_or_install_all() {
-	update_or_install_brew()
-	update_or_install_golang()
+update_or_install_postgres() {
+	println "checking postgres"
+
+	if cask_is_installed postgresql ; then
+		if ! brew outdated --quiet postgresql ; then
+			println "updating postgres"
+		else
+			println "postgres up to date"
+		fi
+	else
+		println "installing postgres"
+		brew install postgresql
+	fi
 }
 
-update_or_install_golang
+update_or_install_all() {
+	update_or_install_brew
+	update_or_install_golang
+	update_or_install_postgres
+}
 
-# command left to get:
 # rails?
 # node/npm?
-# postgresql
 # react?
 # python3 -> append to file, then run brew command
 # run full suite of installs/updates
